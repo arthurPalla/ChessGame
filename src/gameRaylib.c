@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "graphics.h"
-#define HEIGHT 1000
-#define WIDTH 1000
+#include "../header/graphics.h"
+
+
 int main(int argc, char const *argv[]){
 
     InitWindow(HEIGHT,WIDTH,"Fenetre");
@@ -35,6 +35,7 @@ int main(int argc, char const *argv[]){
         EndDrawing();
 
     }
+    free_game(game);
     CloseWindow();
     return 0;
 }

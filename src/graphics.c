@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "graphics.h"
+#include "../header/graphics.h"
 
 #define HEIGHT 1000
 #define WIDTH 1000
@@ -142,4 +142,10 @@ void draw_field(){
         else start = 0;
     }
     EndDrawing();
+}
+void free_game(piece* game){
+    for(int i = 0; i<32; i++){
+        UnloadTexture(game[i].sprite);
+    }
+    printf("ALL GAME TEXTURE UNLOADED\n");
 }
