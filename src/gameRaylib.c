@@ -8,7 +8,7 @@
 int main(int argc, char const *argv[]){
 
     InitWindow(HEIGHT,WIDTH,"Fenetre");
-    piece game[32];
+    piece game[64];
     SetTargetFPS(120);
     init_game(game);
     ClearBackground(RAYWHITE);
@@ -18,7 +18,6 @@ int main(int argc, char const *argv[]){
     Vector2 mouse_pos = { -100.0f, -100.0f };
     while(!WindowShouldClose()){
         mouse_pos = GetMousePosition();
-        
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
 
             if(selected == NULL){
