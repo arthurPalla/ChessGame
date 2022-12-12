@@ -23,11 +23,10 @@ int main(int argc, char const *argv[]){
 
             if(selected == NULL){
                 get_piece_atco((int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT), game, &selected);
-                highlight(*selected, true);
+                if(selected != NULL)  highlight(*selected, true);
             }
             else{
-                highlight(*selected, false);
-                move_piece_to(selected,game, (int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT));
+                if(!move_piece_to(selected,game, (int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT))) highlight(*selected, false);
                 selected = NULL;
             }
         }

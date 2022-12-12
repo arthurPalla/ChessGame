@@ -1,10 +1,12 @@
-#ifndef HEADERFILE_H
-#define HEADERFILE_H
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+#define HEIGHT 1000
+#define WIDTH 1000
 
 typedef enum type type;
 typedef enum couleur couleur;
 enum type{
-    PION,TOUR,CAVALIER,FOU,REINE,ROI
+    PION,TOUR,CAVALIER,FOU,REINE,ROI,NONE
 };
 enum couleur{
     NOIR, BLANC
@@ -24,13 +26,14 @@ void highlight(piece, bool);
 void drawgame(piece*);
 void init_sprite_piece(piece*);
 void get_piece_atco(int, int, piece*, piece**);
-void move_piece_to(piece* p,piece* game, int x, int y);
+bool move_piece_to(piece* p,piece* game, int x, int y);
 void draw_field();
 void free_game(piece*);
-#endif
-#ifndef HEIGHT
-#define HEIGHT 1000
-#endif
-#ifndef WIDTH
-#define WIDTH 1000
+bool pion_caneat(piece p, piece toeat);
+bool can_moove(piece p, piece* game, int x, int y);
+bool pion_moovements(piece p, int x, int y);
+bool cavalier_moovements(piece p, int x, int y);
+void change_color(couleur* c);
+bool tour_moovements(piece p, int x, int y);
+
 #endif

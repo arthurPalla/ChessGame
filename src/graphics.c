@@ -6,6 +6,7 @@
 
 #define HEIGHT 1000
 #define WIDTH 1000
+
 void init_game(piece* jeu){
     type pieces[8] = {TOUR, CAVALIER, FOU, REINE,ROI,FOU,CAVALIER,TOUR};
     for(int i = 0; i<8;i++){
@@ -37,10 +38,11 @@ void init_game(piece* jeu){
         init_sprite_piece(&jeu[i+16]);
     }
 }
+
 void highlight(piece p, bool flag){
     BeginDrawing();
     if(flag){
-        DrawRectangle(p.x*WIDTH/8,p.y*HEIGHT/8,WIDTH/8,WIDTH/8,GREEN);
+        DrawRectangle(p.x*WIDTH/8,p.y*HEIGHT/8,WIDTH/8,WIDTH/8,LIGHTGRAY);
         DrawTexture(p.sprite, p.x*WIDTH/8, p.y*WIDTH/8,WHITE);
     }
     else{
@@ -50,9 +52,11 @@ void highlight(piece p, bool flag){
         else{
             DrawRectangle(p.x*WIDTH/8,p.y*HEIGHT/8,WIDTH/8,WIDTH/8,RAYWHITE);
         }
+        DrawTexture(p.sprite, p.x*WIDTH/8, p.y*WIDTH/8,WHITE);
     }
     EndDrawing();
 }
+
 void drawgame(piece* jeu){
     BeginDrawing();
     for(int i = 0; i <32; i++){
@@ -93,6 +97,7 @@ void init_sprite_piece(piece* p){
     
 
 }
+
 void get_piece_atco(int x, int y, piece* game, piece** p){
     for(int i = 0; i < 32; i++){
         if(game[i].x == x && game[i].y == y && game[i].alive){
@@ -102,7 +107,11 @@ void get_piece_atco(int x, int y, piece* game, piece** p){
     }
     return;
 }
-void move_piece_to(piece* p,piece* game, int x, int y){
+
+bool move_piece_to(piece* p,piece* game, int x, int y){
+    if(can_moove((*p),game,x,y) == false){
+        return false;
+    }
     BeginDrawing();
         if(((*p).y % 2 == 0 && (*p).x %2 == 0) || ((*p).y %2 == 1 && (*p).x % 2  == 1)){
             DrawRectangle((*p).x*WIDTH/8,(*p).y*HEIGHT/8,WIDTH/8,WIDTH/8,GRAY);
@@ -127,6 +136,7 @@ void move_piece_to(piece* p,piece* game, int x, int y){
     }
    DrawTexture((*p).sprite,(*p).x*WIDTH/8 ,(*p).y*HEIGHT/8,WHITE);
     EndDrawing();
+    return true;
 }
 
 void draw_field(){
@@ -143,9 +153,75 @@ void draw_field(){
     }
     EndDrawing();
 }
+
 void free_game(piece* game){
     for(int i = 0; i<32; i++){
         UnloadTexture(game[i].sprite);
     }
     printf("ALL GAME TEXTURE UNLOADED\n");
+}
+
+bool can_moove(piece p, piece* game, int x, int y){
+    piece* temp = NULL;
+    get_piece_atco(x,y,game, &temp);
+    if(temp != NULL){
+        if((*temp).x == p.x && (*temp).y == p.y){
+            return false;
+        }
+        if((*temp).col == p.col){
+            return false;
+        }
+        if(p.type_piece == PION ){
+            return pion_caneat(p, (*temp));
+        }
+    }
+    if(p.type_piece == PION){
+            return pion_moovements(p, x,y);
+        }
+    if(p.type_piece == CAVALIER){
+        return cavalier_moovements(p, x, y);
+    }
+    if(p.type_piece == TOUR){
+        return tour_moovements(p,x,y);
+    }
+    return true;
+}
+
+bool pion_caneat(piece p, piece toeat){
+    if(p.col == NOIR){
+        return ((p.x == toeat.x + 1 || p.x == toeat.x -1) && toeat.y == p.y +1);
+    }
+    return ((p.x == toeat.x + 1 || p.x == toeat.x  -1 ) && toeat.y == p.y -1);
+}
+
+bool pion_moovements(piece p, int x, int y){
+    if(p.col ==NOIR){
+        if(p.y == 1){
+            return (y <= 3 && p.x == x);
+        }
+        return (y == p.y + 1 && x == p.x);
+    }
+    if(p.y == 6){
+        return y>=4 && p.x == x;
+    }
+    return (y == p.y -1 && p.x == x);
+}
+void change_color(couleur* c){
+    if((*c) == BLANC){
+        (*c) = NOIR;
+        return;
+    }
+    (*c) = BLANC;
+}
+bool tour_moovements(piece p, int x, int y){
+    if(x == p.x){
+        return true;
+    }
+    if(y == p.y){
+        return true;
+    }
+    return false;
+}
+bool cavalier_moovements(piece p, int x, int y){
+    return((x == p.x + 2 && y == p.y +1) || (x == p.x +2 && y == p.y -1) || (x == p.x -2 && y == p.y +1) || (x == p.x -2 && y == p.y -1)  || (y == p.y + 2 && x == p.x +1) || (y == p.y +2 && x == p.x -1) || (y == p.y -2 && x == p.x +1) || (y == p.y -2 && x == p.x -1));
 }
