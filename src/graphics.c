@@ -153,6 +153,14 @@ bool move_piece_to(piece* p,piece* game, int x, int y){
     }
     DrawTexture((*p).sprite,(*p).x*WIDTH/8 ,(*p).y*HEIGHT/8,WHITE);
     EndDrawing();
+    piece king;
+    getking((*p).col, game,&king);
+    highlight(king, false, BLACK);
+    if(echec_color(game, get_other_color((*p).col))){
+        piece temp;
+        getking(get_other_color((*p).col),game,&temp);
+        highlight(temp,true,RED);
+    }
     return true;
 }
 
