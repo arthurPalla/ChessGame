@@ -48,10 +48,10 @@ void init_game(piece* jeu){
     }
 }
 
-void highlight(piece p, bool flag){
+void highlight(piece p, bool flag, Color col){
     BeginDrawing();
     if(flag){
-        DrawRectangle(p.x*WIDTH/8,p.y*HEIGHT/8,WIDTH/8,WIDTH/8,LIGHTGRAY);
+        DrawRectangle(p.x*WIDTH/8,p.y*HEIGHT/8,WIDTH/8,WIDTH/8,col);
         DrawTexture(p.sprite, p.x*WIDTH/8, p.y*WIDTH/8,WHITE);
     }
     else{

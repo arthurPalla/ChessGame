@@ -23,7 +23,7 @@ typedef struct{
 }piece;
 
 void init_game(piece*);
-void highlight(piece, bool);
+void highlight(piece, bool, Color);
 void drawgame(piece*);
 void init_sprite_piece(piece*);
 void get_piece_atco(int, int, piece*, piece**);
