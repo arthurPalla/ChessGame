@@ -30,6 +30,8 @@ int main(int argc, char const *argv[]){
             }
         }
         BeginDrawing();
+        draw_field();
+        drawgame(game);
         EndDrawing();
 
     }
