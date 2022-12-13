@@ -27,6 +27,15 @@ bool can_moove(piece p, piece* game, int x, int y){
     if(p.type_piece == TOUR){
         return tour_movements(p,game,x,y);
     }
+    if(p.type_piece == FOU){
+        return fou_movements(p,x,y,game);
+    }
+    if(p.type_piece == ROI){
+        return king_movements(p,x,y);
+    }
+    if(p.type_piece == REINE){
+        return king_movements(p,x,y) || fou_movements(p,x,y,game) || tour_movements(p,game,x,y);
+    }
     return false;
 }
 
@@ -104,4 +113,64 @@ bool anyPieceInRoWY(int x, int y, int ymax, piece* game){
 }
 bool cavalier_movements(piece p, int x, int y){
     return((x == p.x + 2 && y == p.y +1) || (x == p.x +2 && y == p.y -1) || (x == p.x -2 && y == p.y +1) || (x == p.x -2 && y == p.y -1)  || (y == p.y + 2 && x == p.x +1) || (y == p.y +2 && x == p.x -1) || (y == p.y -2 && x == p.x +1) || (y == p.y -2 && x == p.x -1));
+}
+bool fou_movements(piece p, int x, int y, piece* game){
+    piece* temp = NULL;
+    int c = 0;
+    if(p.x < x && p.y <y){
+        for(int i = 1; i<x - p.x; i++){
+            c++;
+            get_piece_atco(p.x + i, p.y + i, game, &temp);
+            if(temp != NULL){
+                return false;
+            }
+        }
+        if(p.x + c +1 == x && p.y + c + 1 == y){
+            return true;
+        }
+        return false;
+    }
+    else if(p.x < x && p.y > y){
+        for(int i = 1; i<x - p.x; i++){
+            c++;
+            get_piece_atco(p.x + i, p.y - i, game, &temp);
+            if(temp != NULL){
+                return false;
+            }
+        }
+        if(p.x + c +1 == x && p.y - c - 1 == y){
+            return true;
+        }
+        return false;     
+    }
+    else if(p.x > x && p.y < y){
+        for(int i = 1; i<y - p.y; i++){
+            c++;
+            get_piece_atco(p.x - i, p.y + i, game, &temp);
+            if(temp != NULL){
+                return false;
+            }
+        }
+        if(p.x - c -1 == x && p.y + c + 1 == y){
+            return true;
+        }
+        return false;
+    }
+    else if(p.x > x && p.y > y){
+        for(int i = 1; i<p.x - x; i++){
+            c++;
+            get_piece_atco(p.x - i, p.y - i, game, &temp);
+            if(temp != NULL){
+                return false;
+            }
+        }
+        if(p.x - c -1 == x && p.y - c -1 == y){
+            return true;
+        }
+        return false;
+    }
+    return false;
+}
+bool king_movements(piece p, int x, int y){
+    return x<=p.x+1 && x>=p.x-1 && y<=p.y+1 && y>= p.y-1;
 }
