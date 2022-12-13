@@ -16,6 +16,7 @@ int main(int argc, char const *argv[]){
     drawgame(game);
     piece* selected = NULL;
     Vector2 mouse_pos = { -100.0f, -100.0f };
+
     while(!WindowShouldClose()){
         mouse_pos = GetMousePosition();
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
@@ -30,8 +31,6 @@ int main(int argc, char const *argv[]){
             }
         }
         BeginDrawing();
-        draw_field();
-        drawgame(game);
         EndDrawing();
 
     }

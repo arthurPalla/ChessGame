@@ -4,9 +4,10 @@
 #include "../header/gamerules.h"
 #include <stdio.h>
 
-bool can_moove(piece p, piece* game, int x, int y){
+bool can_moove(piece p, piece* game, int x, int y, bool verify){
     piece* temp = NULL;
     get_piece_atco(x,y,game, &temp);
+    bool to_return;
     if(temp != NULL){
         if((*temp).x == p.x && (*temp).y == p.y){
             return false;
@@ -19,24 +20,43 @@ bool can_moove(piece p, piece* game, int x, int y){
         }
     }
     if(p.type_piece == PION){
-            return pion_movements(p, x,y);
+            to_return = pion_movements(p, x,y);
         }
     if(p.type_piece == CAVALIER){
-        return cavalier_movements(p, x, y);
+        to_return = cavalier_movements(p, x, y);
     }
     if(p.type_piece == TOUR){
-        return tour_movements(p,game,x,y);
+        to_return = tour_movements(p,game,x,y);
     }
     if(p.type_piece == FOU){
-        return fou_movements(p,x,y,game);
+        to_return = fou_movements(p,x,y,game);
     }
     if(p.type_piece == ROI){
-        return king_movements(p,x,y);
+        to_return = king_movements(p,x,y);
     }
     if(p.type_piece == REINE){
-        return king_movements(p,x,y) || fou_movements(p,x,y,game) || tour_movements(p,game,x,y);
+        to_return = king_movements(p,x,y) || fou_movements(p,x,y,game) || tour_movements(p,game,x,y);
     }
-    return false;
+    if(to_return == false){
+        return false;
+    }
+    if(verify){
+        int x1,y1;
+        x1 = p.x;
+        y1 = p.y;
+        p.x = x;
+        p.y = y;
+        type temp = game[8*y1 +x1].type_piece;
+        game[8*y + x] = p;
+        game[8*y1 + x1].type_piece = NONE;
+        game[8*y1 + x1].init = true;
+        to_return = !echec_color(game, p.col);
+        game[8*y+x].type_piece = NONE;
+        game[8*y1 + x1].type_piece = temp;
+        p.x = x1;
+        p.y = y1;
+    }
+    return to_return;
 }
 
 bool pion_caneat(piece p, piece toeat){
@@ -173,4 +193,27 @@ bool fou_movements(piece p, int x, int y, piece* game){
 }
 bool king_movements(piece p, int x, int y){
     return x<=p.x+1 && x>=p.x-1 && y<=p.y+1 && y>= p.y-1;
+}
+void getking(couleur col, piece* game, piece* p){
+    for(int i = 0; i <64; i++){
+        if(game[i].type_piece == ROI){
+            if(game[i].col == col){
+             (*p) = game[i];   
+             return;
+            }
+        }
+    }
+}
+bool echec_color(piece* game, couleur col){
+    piece king;
+    couleur other_col = get_other_color(col);
+    getking(col,game,&king);
+    for(int i = 0; i <64;i++){
+        if(game[i].col == other_col){
+            if(can_moove(game[i], game, king.x, king.y, false)){
+                return true;
+            }
+        }
+    }
+    return false;
 }

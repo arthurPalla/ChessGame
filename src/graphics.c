@@ -70,7 +70,9 @@ void drawgame(piece* jeu){
     BeginDrawing();
     for(int i = 0; i <64; i++){
         if(jeu[i].type_piece != NONE){
-            DrawTexture(jeu[i].sprite,jeu[i].x*WIDTH/8 ,jeu[i].y*HEIGHT/8,WHITE);
+            if(jeu[i].alive == true){
+                DrawTexture(jeu[i].sprite,jeu[i].x*WIDTH/8 ,jeu[i].y*HEIGHT/8,WHITE);
+            }
         }
     }
     EndDrawing();
@@ -118,7 +120,7 @@ void get_piece_atco(int x, int y, piece* game, piece** p){
     }
 }
 bool move_piece_to(piece* p,piece* game, int x, int y){
-    if(can_moove((*p),game,x,y) == false){
+    if(can_moove((*p),game,x,y, true) == false){
         return false;
     }
     BeginDrawing();
@@ -184,4 +186,10 @@ void change_color(couleur* c){
         return;
     }
     (*c) = BLANC;
+}
+couleur get_other_color(couleur c){
+    if(c == BLANC){
+        return NOIR;
+    }
+    return BLANC;
 }
