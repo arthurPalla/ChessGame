@@ -5,8 +5,6 @@
 #include "../header/graphics.h"
 #include "../header/gamerules.h"
 
-#define HEIGHT 1000
-#define WIDTH 1000
 
 void init_game(piece* jeu){
     type pieces[8] = {TOUR, CAVALIER, FOU, REINE,ROI,FOU,CAVALIER,TOUR};
@@ -15,14 +13,12 @@ void init_game(piece* jeu){
         jeu[i].x = i;
         jeu[i].y = 0;
         jeu[i].col = NOIR;
-        jeu[i].alive = true;
         jeu[i].init = true;
         init_sprite_piece(&jeu[i]);
         jeu[i+56].type_piece = pieces[i];
         jeu[i+56].x = i;
         jeu[i+56].y = 7;
         jeu[i+56].col = BLANC;
-        jeu[i+56].alive = true;
         jeu[i+56].init = true;
         init_sprite_piece(&jeu[i+56]);
     }
@@ -31,14 +27,12 @@ void init_game(piece* jeu){
         jeu[i+8].x = i;
         jeu[i+8].y = 1;
         jeu[i+8].col = NOIR;
-        jeu[i+8].alive = true;
         jeu[i+8].init = true;
         init_sprite_piece(&jeu[i+8]);
         jeu[i+48].type_piece = PION;
         jeu[i+48].x = i;
         jeu[i+48].y = 6;
         jeu[i+48].col = BLANC;
-        jeu[i+48].alive = true;
         jeu[i+48].init = false;
         init_sprite_piece(&jeu[i+48]);
     }
@@ -70,9 +64,7 @@ void drawgame(piece* jeu){
     BeginDrawing();
     for(int i = 0; i <64; i++){
         if(jeu[i].type_piece != NONE){
-            if(jeu[i].alive == true){
-                DrawTexture(jeu[i].sprite,jeu[i].x*WIDTH/8 ,jeu[i].y*HEIGHT/8,WHITE);
-            }
+            DrawTexture(jeu[i].sprite,jeu[i].x*WIDTH/8 ,jeu[i].y*HEIGHT/8,WHITE);
         }
     }
     EndDrawing();
@@ -143,7 +135,7 @@ bool move_piece_to(piece* p,piece* game, int x, int y){
     game[8*y1 + x1].init = true;
     BeginDrawing();
     if(temp != NULL){
-        (*temp).alive = false;
+        //(*temp).alive = false;
         if((y % 2 == 0 && x %2 == 0) || (y %2 == 1 && x % 2  == 1)){
             DrawRectangle(x*WIDTH/8,y*HEIGHT/8,WIDTH/8,WIDTH/8,GRAY);
         }
@@ -169,6 +161,7 @@ void draw_field(){
     int w_square = WIDTH/8;
     int start = 0;
     BeginDrawing();
+    ClearBackground(RAYWHITE);
     for(int j=0;j<HEIGHT; j+=h_square){
         for(int i = start; i<WIDTH; i+=w_square * 2){
             DrawRectangle(i,j,w_square,h_square,GRAY);

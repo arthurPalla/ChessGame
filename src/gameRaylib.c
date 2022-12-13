@@ -2,16 +2,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "../header/graphics.h"
+#include "../header/gamerules.h"
 
 
 int main(int argc, char const *argv[]){
 
     InitWindow(HEIGHT,WIDTH,"Fenetre");
     piece game[64];
-    SetTargetFPS(120);
+    SetTargetFPS(30);
     init_game(game);
-    ClearBackground(RAYWHITE);
     draw_field();
     drawgame(game);
     piece* selected = NULL;
@@ -23,12 +22,21 @@ int main(int argc, char const *argv[]){
 
             if(selected == NULL){
                 get_piece_atco((int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT), game, &selected);
-                if(selected != NULL)  highlight(*selected, true, LIGHTGRAY);
+                if(selected != NULL){
+                    if((*selected).type_piece != ROI || !echec_color(game, (*selected).col))
+                    highlight(*selected, true, LIGHTGRAY);
+                }
             }
             else{
-                if(!move_piece_to(selected,game, (int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT))) highlight(*selected, false, LIGHTGRAY);
+                if(!move_piece_to(selected,game, (int)((mouse_pos.x*8)/WIDTH), (int)((mouse_pos.y * 8)/ HEIGHT)) && ((*selected).type_piece != ROI || !echec_color(game, (*selected).col))){ 
+                    highlight(*selected, false, LIGHTGRAY);
+                    }
                 selected = NULL;
             }
+        }
+        if(IsKeyPressed(KEY_ENTER)){
+            draw_field();
+            drawgame(game);
         }
         BeginDrawing();
         EndDrawing();

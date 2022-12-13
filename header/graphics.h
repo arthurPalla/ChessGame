@@ -18,7 +18,6 @@ typedef struct{
     type type_piece;
     int x;
     int y;
-    bool alive;
     bool init;
 }piece;
 

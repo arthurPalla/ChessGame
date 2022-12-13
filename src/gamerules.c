@@ -47,11 +47,12 @@ bool can_moove(piece p, piece* game, int x, int y, bool verify){
         p.x = x;
         p.y = y;
         type temp = game[8*y1 +x1].type_piece;
+        type temp2 = game[8*y+x].type_piece;
         game[8*y + x] = p;
         game[8*y1 + x1].type_piece = NONE;
         game[8*y1 + x1].init = true;
         to_return = !echec_color(game, p.col);
-        game[8*y+x].type_piece = NONE;
+        game[8*y+x].type_piece = temp2;
         game[8*y1 + x1].type_piece = temp;
         p.x = x1;
         p.y = y1;
