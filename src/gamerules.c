@@ -19,13 +19,13 @@ bool can_moove(piece p, piece* game, int x, int y){
         }
     }
     if(p.type_piece == PION){
-            return pion_moovements(p, x,y);
+            return pion_movements(p, x,y);
         }
     if(p.type_piece == CAVALIER){
-        return cavalier_moovements(p, x, y);
+        return cavalier_movements(p, x, y);
     }
     if(p.type_piece == TOUR){
-        return tour_moovements(p,game,x,y);
+        return tour_movements(p,game,x,y);
     }
     return false;
 }
@@ -37,7 +37,7 @@ bool pion_caneat(piece p, piece toeat){
     return ((p.x == toeat.x + 1 || p.x == toeat.x  -1 ) && toeat.y == p.y -1);
 }
 
-bool pion_moovements(piece p, int x, int y){
+bool pion_movements(piece p, int x, int y){
     if(p.col ==NOIR){
         if(p.y == 1){
             return (y <= 3 && p.x == x);
@@ -50,7 +50,7 @@ bool pion_moovements(piece p, int x, int y){
     return (y == p.y -1 && p.x == x);
 }
 
-bool tour_moovements(piece p,piece* game, int x, int y){
+bool tour_movements(piece p,piece* game, int x, int y){
     if(x == p.x){
         return anyPieceInRoWY(p.x,p.y, y, game);
     }
@@ -102,6 +102,6 @@ bool anyPieceInRoWY(int x, int y, int ymax, piece* game){
         return true;
     }
 }
-bool cavalier_moovements(piece p, int x, int y){
+bool cavalier_movements(piece p, int x, int y){
     return((x == p.x + 2 && y == p.y +1) || (x == p.x +2 && y == p.y -1) || (x == p.x -2 && y == p.y +1) || (x == p.x -2 && y == p.y -1)  || (y == p.y + 2 && x == p.x +1) || (y == p.y +2 && x == p.x -1) || (y == p.y -2 && x == p.x +1) || (y == p.y -2 && x == p.x -1));
 }
