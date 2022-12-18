@@ -1,8 +1,9 @@
-
 #include <stdbool.h>
-#include "../header/graphics.h"
-#include "../header/gamerules.h"
 #include <stdio.h>
+
+#include "graphics.h"
+#include "gamerules.h"
+
 
 bool can_moove(piece p, piece* game, int x, int y, bool verify){
     piece* temp = NULL;

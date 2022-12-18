@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "../header/graphics.h"
-#include "../header/gamerules.h"
+#include "graphics.h"
+#include "gamerules.h"
 
 
 void init_game(piece* jeu){
@@ -71,19 +71,19 @@ void drawgame(piece* jeu){
 }
 
 void init_sprite_piece(piece* p){
-    int y = 0;
-    int x = 0;
+    int y = 60;
+    int x = 10;
     Texture2D sprite;
     Image test;
     test = LoadImage("Chess1.png");
     if((*p).col == BLANC){
-        y += 400;
+        y = 430;
     }
     if((*p).type_piece == FOU){
-        x += 300;
+        x = 308;
     }
     if((*p).type_piece == REINE){
-        x+=600;
+        x = 608;
     }
     if((*p).type_piece == ROI){
         x+=900;
@@ -94,7 +94,7 @@ void init_sprite_piece(piece* p){
     if((*p).type_piece == PION){
         x+=1500;
     }
-    ImageCrop(&test, (Rectangle){ x, y, 300, 400 });
+    ImageCrop(&test, (Rectangle){ x, y, 300, 300 });
     ImageResize(&test,WIDTH / 8, HEIGHT/ 8);
     sprite = LoadTextureFromImage(test);
     UnloadImage(test);

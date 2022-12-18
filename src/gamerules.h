@@ -1,6 +1,7 @@
 #ifndef GAMERULES_H
 #define GAMERULES_H
-#include "../header/graphics.h"
+
+#include "graphics.h"
 
 bool pion_caneat(piece p, piece toeat);
 bool can_moove(piece p, piece* game, int x, int y, bool verify);

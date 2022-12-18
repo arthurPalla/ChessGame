@@ -1,9 +1,10 @@
-#include "raylib.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "../header/gamerules.h"
 
+#include "raylib.h"
+
+#include "gamerules.h"
 
 int main(int argc, char const *argv[]){
 
