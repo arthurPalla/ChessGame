@@ -19,6 +19,7 @@ typedef struct{
     int x;
     int y;
     bool init;
+    bool has_mooved;
 }piece;
 
 void init_game(piece*);
@@ -31,5 +32,6 @@ void draw_field();
 void free_game(piece*);
 void change_color(couleur* c);
 couleur get_other_color(couleur c);
+bool roque(piece* p, piece* game, int x , int y);
 
 #endif

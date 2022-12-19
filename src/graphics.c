@@ -14,12 +14,14 @@ void init_game(piece* jeu){
         jeu[i].y = 0;
         jeu[i].col = NOIR;
         jeu[i].init = true;
+        jeu[i].has_mooved = false;
         init_sprite_piece(&jeu[i]);
         jeu[i+56].type_piece = pieces[i];
         jeu[i+56].x = i;
         jeu[i+56].y = 7;
         jeu[i+56].col = BLANC;
         jeu[i+56].init = true;
+        jeu[i+56].has_mooved = false;
         init_sprite_piece(&jeu[i+56]);
     }
     for(int i = 0; i<8;i++){
@@ -28,12 +30,14 @@ void init_game(piece* jeu){
         jeu[i+8].y = 1;
         jeu[i+8].col = NOIR;
         jeu[i+8].init = true;
+        jeu[i+8].has_mooved = false;
         init_sprite_piece(&jeu[i+8]);
         jeu[i+48].type_piece = PION;
         jeu[i+48].x = i;
         jeu[i+48].y = 6;
         jeu[i+48].col = BLANC;
         jeu[i+48].init = false;
+        jeu[i+48].has_mooved = false;
         init_sprite_piece(&jeu[i+48]);
     }
     for(int i = 16; i < 48;i++){
@@ -111,6 +115,48 @@ void get_piece_atco(int x, int y, piece* game, piece** p){
         *p = NULL;
     }
 }
+bool roque(piece* p, piece* game, int x , int y){
+    if(!can_roque((*p), game, x ,y)){
+        return false;
+    }
+    int x1,x2;
+    BeginDrawing();
+        if(((*p).y % 2 == 0 && (*p).x %2 == 0) || ((*p).y %2 == 1 && (*p).x % 2  == 1)){
+            DrawRectangle((*p).x*WIDTH/8,(*p).y*HEIGHT/8,WIDTH/8,WIDTH/8,GRAY);
+        }
+        else{
+            DrawRectangle((*p).x*WIDTH/8,(*p).y*HEIGHT/8,WIDTH/8,WIDTH/8,RAYWHITE);
+        }
+        if((y % 2 == 0 && x %2 == 0) || (y %2 == 1 && x % 2  == 1)){
+            DrawRectangle(x*WIDTH/8,y*HEIGHT/8,WIDTH/8,WIDTH/8,GRAY);
+        }
+        else{
+            DrawRectangle(x*WIDTH/8,y*HEIGHT/8,WIDTH/8,WIDTH/8,RAYWHITE);
+        }
+    EndDrawing();
+    piece* tower = NULL;
+    get_piece_atco(x,y,game,&tower);
+    x1 = (*p).x;
+    x2 = (*tower).x;
+    if(x == 0){ 
+        (*tower).x = 2;
+        (*p).x = 1;
+    }
+    else{
+        (*tower).x = 5;
+        (*p).x = 6;
+    }
+    game[8*(*tower).y + (*tower).x] = (*tower);
+    game[8*(*p).y + (*p).x] = (*p);
+    game[8*y + x1].type_piece = NONE;
+    game[8*y + x2].type_piece = NONE;
+    BeginDrawing();
+    DrawTexture((*p).sprite,(*p).x*WIDTH/8 ,(*p).y*HEIGHT/8,WHITE);
+    DrawTexture((*tower).sprite,(*tower).x*WIDTH/8 ,(*tower).y*HEIGHT/8,WHITE);
+    EndDrawing();
+    return true;
+
+}
 bool move_piece_to(piece* p,piece* game, int x, int y){
     if(can_moove((*p),game,x,y, true) == false){
         return false;
@@ -128,6 +174,7 @@ bool move_piece_to(piece* p,piece* game, int x, int y){
     int x1,y1;
     x1 = (*p).x;
     y1 = (*p).y;
+    (*p).has_mooved = true;
     (*p).x = x;
     (*p).y = y;
     game[8*y + x] = (*p);

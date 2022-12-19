@@ -1,21 +1,20 @@
 
 #include <stdbool.h>
-#include "../header/graphics.h"
 #include "../header/gamerules.h"
 #include <stdio.h>
 
 bool can_moove(piece p, piece* game, int x, int y, bool verify){
     piece* temp = NULL;
     get_piece_atco(x,y,game, &temp);
-    bool to_return;
+    bool to_return ;
     if(temp != NULL){
         if((*temp).x == p.x && (*temp).y == p.y){
             return false;
         }
-        if((*temp).col == p.col){
+        else if((*temp).col == p.col){
             return false;
         }
-        if(p.type_piece == PION ){
+        else if(p.type_piece == PION ){
             return pion_caneat(p, (*temp));
         }
     }
@@ -41,25 +40,27 @@ bool can_moove(piece p, piece* game, int x, int y, bool verify){
         return false;
     }
     if(verify){
-        int x1,y1;
-        x1 = p.x;
-        y1 = p.y;
-        p.x = x;
-        p.y = y;
-        type temp = game[8*y1 +x1].type_piece;
-        type temp2 = game[8*y+x].type_piece;
-        game[8*y + x] = p;
-        game[8*y1 + x1].type_piece = NONE;
-        game[8*y1 + x1].init = true;
-        to_return = !echec_color(game, p.col);
-        game[8*y+x].type_piece = temp2;
-        game[8*y1 + x1].type_piece = temp;
-        p.x = x1;
-        p.y = y1;
+        to_return = !simule_and_checkpos(x,y,p,game);
     }
     return to_return;
 }
-
+bool simule_and_checkpos(int x, int y, piece p, piece* game){
+    bool to_return;
+    int x1,y1;
+    x1 = p.x;
+    y1 = p.y;
+    p.x = x;
+    p.y = y;
+    type temp = game[8*y1 +x1].type_piece;
+    type temp2 = game[8*y+x].type_piece;
+    game[8*y + x] = p;
+    game[8*y1 + x1].type_piece = NONE;
+    game[8*y1 + x1].init = true;
+    to_return = echec_color(game, p.col);
+    game[8*y+x].type_piece = temp2;
+    game[8*y1 + x1].type_piece = temp;
+    return to_return;
+}
 bool pion_caneat(piece p, piece toeat){
     if(p.col == NOIR){
         return ((p.x == toeat.x + 1 || p.x == toeat.x -1) && toeat.y == p.y +1);
@@ -217,4 +218,44 @@ bool echec_color(piece* game, couleur col){
         }
     }
     return false;
+}
+bool can_roque(piece p, piece* game, int x, int y){
+    if(y != p.y){
+        return false;
+    }
+    if(p.has_mooved || p.type_piece != ROI){
+        return false;
+    }
+    piece* tower = NULL;
+    piece* temp = NULL;
+    get_piece_atco(x,y,game,&tower);
+    if(tower == NULL){
+        return false;
+    }
+    if((*tower).type_piece != TOUR || (*tower).has_mooved){
+        return false;
+    }
+    if(x == 0){ 
+        for(int i = 1; i <3;i++){
+            get_piece_atco(i,y,game,&temp);
+            if(temp!=NULL){
+                return false;
+            }
+            if(simule_and_checkpos(i,y,p,game)){
+                return false;
+            }
+        }
+    }
+    if(x == 7){
+        for(int i = 6; i >4; i--){
+            get_piece_atco(i,y,game,&temp);
+            if(temp!=NULL){
+                return false;
+            }
+            if(simule_and_checkpos(i,y,p,game)){
+                return false;
+            }
+        }
+    }
+    return true;
 }

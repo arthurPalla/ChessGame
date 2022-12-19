@@ -13,4 +13,6 @@ bool fou_movements(piece p, int x, int y, piece* game);
 bool king_movements(piece p, int x, int y);
 bool echec_color(piece* game, couleur col);
 void getking(couleur col, piece* game, piece* p);
+bool can_roque(piece p, piece* game, int x, int y);;
+bool simule_and_checkpos(int x, int y, piece p, piece* game);
 #endif
