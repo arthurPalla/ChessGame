@@ -259,3 +259,16 @@ bool can_roque(piece p, piece* game, int x, int y){
     }
     return true;
 }
+bool can_promote(piece p, piece* game, int x , int y){
+    if(p.type_piece != PION){
+        return false;
+    }
+    int y1 = 0;
+    if(p.col == NOIR){
+        y1 = 7;
+    }
+    if(y1!=y){
+        return false;
+    }
+    return true;
+}

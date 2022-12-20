@@ -70,6 +70,9 @@ void drawgame(piece* jeu){
         if(jeu[i].type_piece != NONE){
             DrawTexture(jeu[i].sprite,jeu[i].x*WIDTH/8 ,jeu[i].y*HEIGHT/8,WHITE);
         }
+        if(jeu[i].type_piece == ROI && echec_color(jeu,jeu[i].col)){
+            highlight(jeu[i],true,RED);
+        }
     }
     EndDrawing();
 }
@@ -103,8 +106,6 @@ void init_sprite_piece(piece* p){
     sprite = LoadTextureFromImage(test);
     UnloadImage(test);
     (*p).sprite = sprite;
-    
-
 }
 
 void get_piece_atco(int x, int y, piece* game, piece** p){
@@ -177,6 +178,11 @@ bool move_piece_to(piece* p,piece* game, int x, int y){
     (*p).has_mooved = true;
     (*p).x = x;
     (*p).y = y;
+    if(can_promote((*p), game,x,y)){
+        UnloadTexture((*p).sprite);
+        (*p).type_piece = REINE;
+        init_sprite_piece(p);
+    }
     game[8*y + x] = (*p);
     game[8*y1 + x1].type_piece = NONE;
     game[8*y1 + x1].init = true;
