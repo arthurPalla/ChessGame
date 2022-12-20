@@ -16,6 +16,4 @@ void getking(couleur col, piece* game, piece* p);
 bool can_roque(piece p, piece* game, int x, int y);;
 bool simule_and_checkpos(int x, int y, piece p, piece* game);
 bool can_promote(piece p, piece* game, int x , int y);
-void getqueen(couleur col, piece* game, piece* p);
-Texture2D get_sprite(couleur col, type t, piece* game);
 #endif
