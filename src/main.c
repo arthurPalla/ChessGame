@@ -5,8 +5,8 @@
 
 #define HEIGHT 1000
 #define WIDTH 1000
-#include "./visu.h"
-#include "./gamerules.h"
+#include "visu.h"
+#include "gamerules.h"
 #include "visu.c"
 #include "gamerules.c"
 
